@@ -1,16 +1,22 @@
 "use client";
 
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 
-function Brand() {
+type BrandProps = {
+  theme?: "dark" | "light";
+};
+
+function Brand({ theme = "dark" }: BrandProps) {
+  const logo =
+    theme === "dark"
+      ? "/assets/nuvemshop-logo-dark.svg"
+      : "/assets/nuvemshop-logo-light.svg";
+
   return (
-    <span className="brand" aria-label="Nuvemshop Next">
-      <span className="brand__mark" aria-hidden="true">
-        <i />
-        <i />
-      </span>
-      <span className="brand__name">nuvemshop</span>
-      <span className="brand__next">next</span>
+    <span className={`brand brand--${theme}`} aria-label="Nuvemshop Next">
+      <img src={logo} alt="" />
+      <span className="brand__divider" aria-hidden="true" />
+      <span className="brand__next">Next</span>
     </span>
   );
 }
@@ -22,14 +28,69 @@ const tableFacts = [
 ];
 
 const nextPillars = [
-  ["01", "Autonomia para decidir e operar"],
-  ["02", "Infraestrutura para sustentar escala"],
-  ["03", "Proximidade para avançar com clareza"],
+  ["01", "Mais controle sobre a operação"],
+  ["02", "Infraestrutura pronta para picos e escala"],
+  ["03", "Acompanhamento próximo do time Next"],
 ];
 
 export default function Home() {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [confirmed, setConfirmed] = useState(false);
+
+  useEffect(() => {
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    const root = document.documentElement;
+    const hero = document.querySelector<HTMLElement>(".hero");
+    const revealItems = Array.from(
+      document.querySelectorAll<HTMLElement>("[data-reveal]"),
+    );
+
+    if (reducedMotion) {
+      revealItems.forEach((item) => item.classList.add("is-visible"));
+      return;
+    }
+
+    root.dataset.motion = "on";
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        });
+      },
+      { rootMargin: "0px 0px -12% 0px", threshold: 0.12 },
+    );
+
+    revealItems.forEach((item) => observer.observe(item));
+
+    let frame = 0;
+    const updateHero = () => {
+      frame = 0;
+      if (!hero) return;
+      const progress = Math.min(
+        1,
+        Math.max(0, -hero.getBoundingClientRect().top / window.innerHeight),
+      );
+      hero.style.setProperty("--hero-progress", progress.toFixed(3));
+    };
+    const onScroll = () => {
+      if (!frame) frame = window.requestAnimationFrame(updateHero);
+    };
+
+    updateHero();
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+      delete root.dataset.motion;
+    };
+  }, []);
 
   const openRsvp = () => {
     setConfirmed(false);
@@ -45,6 +106,10 @@ export default function Home() {
 
   return (
     <main>
+      <a className="skip-link" href="#conversa">
+        Ir para o conteúdo
+      </a>
+
       <header className="topbar">
         <a className="topbar__brand" href="#inicio">
           <Brand />
@@ -66,8 +131,8 @@ export default function Home() {
             <em>à mesa.</em>
           </h1>
           <p className="hero__lead">
-            Uma conversa reservada entre líderes de e-commerce sobre os
-            desafios e decisões que devem marcar o próximo ciclo de crescimento.
+            Um jantar reservado para líderes de e-commerce trocarem decisões,
+            impasses e caminhos para o próximo ano.
           </p>
 
           <div className="hero__details" aria-label="Informações do evento">
@@ -87,8 +152,7 @@ export default function Home() {
               <span aria-hidden="true">↗</span>
             </button>
             <p>
-              Convite nominal · Até dois representantes por marca · Confirmação
-              até 25/08
+              Convite nominal · Dois lugares por marca · Confirmação até 25/08
             </p>
           </div>
         </div>
@@ -119,31 +183,41 @@ export default function Home() {
       </section>
 
       <section className="conversation section" id="conversa">
-        <div className="section__index">
+        <div className="section__index" data-reveal>
           <span>01</span>
           <span>A conversa</span>
         </div>
 
-        <div className="conversation__statement">
+        <div className="conversation__statement" data-reveal>
           <p className="eyebrow">O formato</p>
           <h2>
             Sem palco. Sem palestra. <em>À mesa.</em>
           </h2>
           <p>
-            Um jantar para trocar experiências com quem conhece, por dentro, o
-            peso das decisões que fazem uma marca crescer.
+            Uma conversa direta, entre pares, sobre o que já funciona — e o que
+            ainda precisa mudar para a marca seguir crescendo.
           </p>
         </div>
 
-        <blockquote>
-          <span>A pergunta que abre a mesa</span>
-          “Se você pudesse destravar um único gargalo para crescer no próximo
-          ano, qual seria?”
-        </blockquote>
+        <div className="question-stage">
+          <blockquote data-reveal>
+            <span>A pergunta que abre a mesa</span>
+            “Se você pudesse destravar um único gargalo para crescer no próximo
+            ano, qual seria?”
+          </blockquote>
+        </div>
 
-        <div className="factline" aria-label="Composição da mesa">
-          {tableFacts.map(([number, label]) => (
-            <div className="factline__item" key={label}>
+        <div
+          className="factline"
+          aria-label="Composição da mesa"
+          data-reveal
+        >
+          {tableFacts.map(([number, label], index) => (
+            <div
+              className="factline__item"
+              key={label}
+              style={{ "--item-index": index } as React.CSSProperties}
+            >
               <strong>{number}</strong>
               <span>{label}</span>
             </div>
@@ -152,57 +226,62 @@ export default function Home() {
       </section>
 
       <section className="curation section section--light">
-        <div className="section__index section__index--dark">
+        <div className="section__index section__index--dark" data-reveal>
           <span>02</span>
           <span>A curadoria</span>
         </div>
 
         <div className="curation__grid">
-          <div>
+          <div data-reveal>
             <p className="eyebrow eyebrow--dark">Quem estará à mesa</p>
             <h2>
-              Uma sala formada por quem já tem escala — e ainda tem decisões
-              importantes pela frente.
+              Uma mesa com quem já construiu muito — e ainda tem decisões
+              grandes pela frente.
             </h2>
           </div>
-          <div className="curation__copy">
+          <div className="curation__copy" data-reveal>
             <p>
-              Fundadores, sócios e líderes de e-commerce de marcas com operação
-              própria, reunidos para uma conversa franca sobre gargalos,
-              escolhas e oportunidades.
+              Sócios, fundadores e líderes de e-commerce de marcas com loja
+              própria e operação madura.
             </p>
             <p>
-              Clientes Next também participam da mesa, trazendo a experiência
-              de quem já atravessou parte desse caminho.
+              Prospects e clientes Next dividem a mesa. A troca acontece entre
+              quem está decidindo os próximos passos e quem já viveu parte
+              deles.
             </p>
             <div className="invitation-note">
               <span>Convite pessoal</span>
-              <strong>Dois lugares reservados por marca.</strong>
+              <strong>Cerca de 15 marcas. Dois lugares por marca.</strong>
             </div>
           </div>
         </div>
       </section>
 
       <section className="next-bridge section">
-        <div className="section__index">
+        <div className="section__index" data-reveal>
           <span>03</span>
           <span>O próximo movimento</span>
         </div>
 
-        <div className="next-bridge__headline">
+        <div className="next-bridge__headline" data-reveal>
           <Brand />
           <h2>
-            Crescer sem perder <em>o comando.</em>
+            Para crescer sem perder <em>o comando.</em>
           </h2>
           <p>
-            Para operações que já ganharam escala, o próximo salto pede
-            infraestrutura, autonomia e proximidade estratégica.
+            Quando a operação ganha escala, crescer deixa de ser só vender mais.
+            É preciso ter autonomia para decidir, estrutura para aguentar o
+            ritmo e gente próxima quando a escolha é importante.
           </p>
         </div>
 
-        <div className="next-pillars">
-          {nextPillars.map(([number, text]) => (
-            <div className="next-pillars__item" key={number}>
+        <div className="next-pillars" data-reveal>
+          {nextPillars.map(([number, text], index) => (
+            <div
+              className="next-pillars__item"
+              key={number}
+              style={{ "--item-index": index } as React.CSSProperties}
+            >
               <span>{number}</span>
               <strong>{text}</strong>
             </div>
@@ -211,32 +290,38 @@ export default function Home() {
       </section>
 
       <section className="venue section">
-        <div className="section__index">
+        <div className="section__index" data-reveal>
           <span>04</span>
           <span>O lugar</span>
         </div>
 
-        <div className="venue__heading">
+        <div className="venue__heading" data-reveal>
           <p className="eyebrow">Bar do Cofre · Farol Santander</p>
-          <h2>Uma noite reservada no coração histórico de São Paulo.</h2>
+          <h2>
+            O Bar do Cofre abre as portas para uma conversa que pede reserva.
+          </h2>
+          <p>
+            No subsolo do Farol Santander, um dos espaços mais singulares de São
+            Paulo recebe uma mesa formada para esta noite.
+          </p>
         </div>
 
         <div className="venue__gallery">
-          <figure className="venue__main">
+          <figure className="venue__main" data-reveal="image">
             <img
               src="/assets/vault-entrance.png"
               alt="Entrada circular do Bar do Cofre"
               loading="lazy"
             />
           </figure>
-          <figure className="venue__detail">
+          <figure className="venue__detail" data-reveal="image">
             <img
               src="/assets/vault-cocktail.png"
               alt="Cofres individuais e coquetel no Bar do Cofre"
               loading="lazy"
             />
           </figure>
-          <div className="venue__address">
+          <div className="venue__address" data-reveal>
             <span>27.08 · São Paulo</span>
             <strong>Rua João Brícola, 24</strong>
             <p>Centro Histórico · Farol Santander</p>
@@ -245,16 +330,16 @@ export default function Home() {
       </section>
 
       <section className="rsvp section section--light" id="rsvp">
-        <div className="rsvp__copy">
+        <div className="rsvp__copy" data-reveal>
           <p className="eyebrow eyebrow--dark">RSVP</p>
-          <h2>Seu lugar à mesa.</h2>
+          <h2>Seu lugar está à mesa.</h2>
           <p>
-            Confirme sua presença até 25/08. Após a confirmação, você receberá
-            por e-mail os próximos detalhes e o convite de agenda.
+            Confirme sua presença até 25/08. Assim que confirmar, você recebe
+            por e-mail os detalhes do encontro e o convite de agenda.
           </p>
         </div>
 
-        <div className="rsvp__card">
+        <div className="rsvp__card" data-reveal>
           <div className="rsvp__date">
             <span>AGOSTO</span>
             <strong>27</strong>
@@ -268,13 +353,13 @@ export default function Home() {
             Confirmar presença
             <span aria-hidden="true">↗</span>
           </button>
-          <small>Convite nominal · Até dois representantes por marca</small>
+          <small>Convite nominal · Dois representantes por marca</small>
         </div>
       </section>
 
       <footer>
         <Brand />
-        <p>Uma conversa para os próximos movimentos de quem já é referência.</p>
+        <p>Uma conversa sobre os próximos movimentos de quem já é referência.</p>
         <span>São Paulo · 2026</span>
       </footer>
 
@@ -301,9 +386,9 @@ export default function Home() {
         {confirmed ? (
           <div className="success-state" aria-live="polite">
             <span>27.08</span>
-            <h2>Presença confirmada.</h2>
+            <h2>Tudo certo. Sua presença está confirmada.</h2>
             <p>
-              Você receberá por e-mail os próximos detalhes e o convite de
+              Você receberá por e-mail os detalhes do encontro e o convite de
               agenda.
             </p>
             <button className="button button--blue" onClick={closeRsvp}>
@@ -316,11 +401,12 @@ export default function Home() {
               <p className="eyebrow eyebrow--dark">RSVP · 27.08</p>
               <h2>Confirme sua presença.</h2>
               <p>
-                Dois lugares estão reservados para sua marca. Preencha os dados
-                abaixo para confirmar.
+                Dois lugares estão reservados para a sua marca. Preencha seus
+                dados e, se já souber, inclua o nome de quem vai acompanhar
+                você.
               </p>
               <small>
-                Wireframe: este formulário ainda não envia dados ao HubSpot.
+                Prévia: o formulário ainda não envia dados ao HubSpot.
               </small>
             </div>
 
