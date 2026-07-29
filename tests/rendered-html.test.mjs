@@ -47,9 +47,12 @@ test("mantém imagens, marca oficial e formulário na marcação", async () => {
   assert.match(html, /vault-door-closeup\.png/);
   assert.match(html, /vault-entrance\.png/);
   assert.match(html, /nuvemshop-logo-dark\.svg/);
+  assert.match(html, /favicon-next\.ico/);
   assert.match(html, /og\.png/);
   assert.match(html, /<dialog/i);
   assert.match(html, /E-mail corporativo/);
   assert.match(html, /segundo representante/);
   assert.match(html, /ainda não envia dados ao HubSpot/);
+  assert.match(html, /linkedin\.com\/company\/nuvemshop/);
+  assert.match(html, /instagram\.com\/nuvemshop/);
 });

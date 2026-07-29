@@ -28,14 +28,25 @@ const tableFacts = [
 ];
 
 const nextPillars = [
-  ["01", "Mais controle sobre a operação"],
+  ["01", "Controle para conduzir a operação"],
   ["02", "Infraestrutura pronta para picos e escala"],
-  ["03", "Acompanhamento próximo do time Next"],
+  ["03", "Um time Next próximo das decisões"],
+];
+
+const socialLinks = [
+  ["LinkedIn", "https://www.linkedin.com/company/nuvemshop/"],
+  ["Instagram", "https://www.instagram.com/nuvemshop/"],
+  ["YouTube", "https://www.youtube.com/nuvemshop"],
+  ["Facebook", "https://www.facebook.com/Nuvemshop/"],
 ];
 
 export default function Home() {
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const headerRef = useRef<HTMLElement>(null);
+  const progressRef = useRef<HTMLSpanElement>(null);
+  const mobileCtaRef = useRef<HTMLButtonElement>(null);
   const [confirmed, setConfirmed] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const reducedMotion = window.matchMedia(
@@ -43,16 +54,16 @@ export default function Home() {
     ).matches;
     const root = document.documentElement;
     const hero = document.querySelector<HTMLElement>(".hero");
+    const ctaSuppressSections = Array.from(
+      document.querySelectorAll<HTMLElement>("[data-cta-suppress]"),
+    );
     const revealItems = Array.from(
       document.querySelectorAll<HTMLElement>("[data-reveal]"),
     );
 
-    if (reducedMotion) {
-      revealItems.forEach((item) => item.classList.add("is-visible"));
-      return;
+    if (!reducedMotion) {
+      root.dataset.motion = "on";
     }
-
-    root.dataset.motion = "on";
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -62,37 +73,74 @@ export default function Home() {
           observer.unobserve(entry.target);
         });
       },
-      { rootMargin: "0px 0px -12% 0px", threshold: 0.12 },
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.08 },
     );
 
-    revealItems.forEach((item) => observer.observe(item));
+    if (reducedMotion) {
+      revealItems.forEach((item) => item.classList.add("is-visible"));
+    } else {
+      revealItems.forEach((item) => observer.observe(item));
+    }
 
     let frame = 0;
-    const updateHero = () => {
+    const updateScrollState = () => {
       frame = 0;
-      if (!hero) return;
-      const progress = Math.min(
-        1,
-        Math.max(0, -hero.getBoundingClientRect().top / window.innerHeight),
+      const scrollTop = window.scrollY;
+      const scrollable =
+        document.documentElement.scrollHeight - window.innerHeight;
+      const progress =
+        scrollable > 0 ? Math.min(1, Math.max(0, scrollTop / scrollable)) : 0;
+
+      headerRef.current?.classList.toggle("is-scrolled", scrollTop > 20);
+      const ctaSuppressed = ctaSuppressSections.some((section) => {
+        const bounds = section.getBoundingClientRect();
+        return bounds.top < window.innerHeight && bounds.bottom > 0;
+      });
+      mobileCtaRef.current?.classList.toggle(
+        "is-visible",
+        scrollTop > window.innerHeight * 0.72 && !ctaSuppressed,
       );
-      hero.style.setProperty("--hero-progress", progress.toFixed(3));
-    };
-    const onScroll = () => {
-      if (!frame) frame = window.requestAnimationFrame(updateHero);
+      if (progressRef.current) {
+        progressRef.current.style.transform = `scaleX(${progress})`;
+      }
+
+      if (hero && !reducedMotion) {
+        const heroProgress = Math.min(
+          1,
+          Math.max(0, -hero.getBoundingClientRect().top / window.innerHeight),
+        );
+        hero.style.setProperty("--hero-progress", heroProgress.toFixed(3));
+      }
     };
 
-    updateHero();
+    const onScroll = () => {
+      if (!frame) frame = window.requestAnimationFrame(updateScrollState);
+    };
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMenuOpen(false);
+    };
+
+    updateScrollState();
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("keydown", onKeyDown);
 
     return () => {
       observer.disconnect();
       window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("keydown", onKeyDown);
       if (frame) window.cancelAnimationFrame(frame);
       delete root.dataset.motion;
     };
   }, []);
 
+  useEffect(() => {
+    document.body.classList.toggle("menu-is-open", menuOpen);
+    return () => document.body.classList.remove("menu-is-open");
+  }, [menuOpen]);
+
   const openRsvp = () => {
+    setMenuOpen(false);
     setConfirmed(false);
     dialogRef.current?.showModal();
   };
@@ -104,35 +152,97 @@ export default function Home() {
     setConfirmed(true);
   };
 
+  const closeMenu = () => setMenuOpen(false);
+
   return (
     <main>
       <a className="skip-link" href="#conversa">
         Ir para o conteúdo
       </a>
 
-      <header className="topbar">
-        <a className="topbar__brand" href="#inicio">
-          <Brand />
-        </a>
-        <div className="topbar__event">
-          <span>27.08</span>
-          <span>Bar do Cofre</span>
+      <header className="site-header" ref={headerRef}>
+        <div className="header-progress" aria-hidden="true">
+          <span ref={progressRef} />
         </div>
-        <button className="button button--small button--ghost" onClick={openRsvp}>
-          Confirmar presença
-        </button>
+
+        <div className="header-inner">
+          <a
+            className="header-brand"
+            href="#inicio"
+            aria-label="Nuvemshop Next, voltar ao início"
+            onClick={closeMenu}
+          >
+            <img
+              className="header-logo header-logo--white"
+              src="/assets/nuvemshop-logo-dark.svg"
+              alt=""
+            />
+            <img
+              className="header-logo header-logo--blue"
+              src="/assets/nuvemshop-logo-light.svg"
+              alt=""
+            />
+            <span className="header-brand__divider" aria-hidden="true" />
+            <span className="header-brand__next">Next</span>
+          </a>
+
+          <p className="header-context">
+            27 de agosto <span>·</span> Bar do Cofre <span>·</span> São Paulo
+          </p>
+
+          <button
+            className="menu-toggle"
+            type="button"
+            aria-expanded={menuOpen}
+            aria-controls="site-nav"
+            aria-label={menuOpen ? "Fechar menu" : "Abrir menu"}
+            onClick={() => setMenuOpen((current) => !current)}
+          >
+            <span />
+            <span />
+            <span />
+          </button>
+
+          <nav
+            className={`site-nav${menuOpen ? " is-open" : ""}`}
+            id="site-nav"
+            aria-label="Navegação principal"
+          >
+            <a href="#conversa" onClick={closeMenu}>
+              A conversa
+            </a>
+            <a href="#curadoria" onClick={closeMenu}>
+              Curadoria
+            </a>
+            <a href="#local" onClick={closeMenu}>
+              O lugar
+            </a>
+            <button
+              className="button button--small button--header"
+              onClick={openRsvp}
+            >
+              Confirmar presença
+            </button>
+          </nav>
+        </div>
       </header>
 
-      <section className="hero" id="inicio">
+      <section className="hero snap-section" id="inicio">
         <div className="hero__content">
           <p className="eyebrow">Nuvemshop Next convida</p>
           <h1>
-            Os próximos movimentos de quem já é referência começam{" "}
-            <em>à mesa.</em>
+            <span className="hero__line">Os próximos</span>
+            <span className="hero__line">movimentos de</span>
+            <span className="hero__line">
+              quem já é <span className="mobile-break">referência</span>
+            </span>
+            <span className="hero__line">
+              começam <em>à mesa.</em>
+            </span>
           </h1>
           <p className="hero__lead">
-            Um jantar reservado para líderes de e-commerce trocarem decisões,
-            impasses e caminhos para o próximo ano.
+            Um jantar reservado para líderes de e-commerce conversarem sobre
+            decisões, impasses e caminhos para o próximo ano.
           </p>
 
           <div className="hero__details" aria-label="Informações do evento">
@@ -151,38 +261,40 @@ export default function Home() {
               Confirmar presença
               <span aria-hidden="true">↗</span>
             </button>
-            <p>
-              Convite nominal · Dois lugares por marca · Confirmação até 25/08
-            </p>
+            <p>Convite nominal · Dois lugares por marca · Até 25/08</p>
           </div>
         </div>
 
-        <div className="portal" aria-hidden="true">
-          <div className="portal__halo" />
-          <div className="portal__ring portal__ring--outer" />
-          <div className="portal__ring portal__ring--middle" />
-          <div className="portal__ring portal__ring--inner" />
-          <div className="portal__ticks" />
+        <div className="portal" aria-label="Porta do cofre se abrindo">
+          <div className="portal__halo" aria-hidden="true" />
+          <div className="portal__ring portal__ring--outer" aria-hidden="true" />
+          <div className="portal__ring portal__ring--middle" aria-hidden="true" />
+          <div className="portal__ring portal__ring--inner" aria-hidden="true" />
+          <div className="portal__ticks" aria-hidden="true" />
+          <div className="portal__window">
+            <img
+              className="portal__interior"
+              src="/assets/vault-entrance.png"
+              alt="Interior do Bar do Cofre visto pela porta circular"
+            />
+            <div className="portal__shade" aria-hidden="true" />
+          </div>
           <img
-            className="portal__image portal__image--base"
+            className="portal__door"
             src="/assets/vault-door-closeup.png"
             alt=""
+            aria-hidden="true"
           />
-          <img
-            className="portal__image portal__image--reveal"
-            src="/assets/vault-door-closeup.png"
-            alt=""
-          />
-          <div className="portal__axis" />
+          <div className="portal__rim" aria-hidden="true" />
         </div>
 
         <a className="hero__scroll" href="#conversa">
-          <span>Continuar</span>
+          <span>Próximo capítulo</span>
           <i aria-hidden="true" />
         </a>
       </section>
 
-      <section className="conversation section" id="conversa">
+      <section className="conversation section snap-section" id="conversa">
         <div className="section__index" data-reveal>
           <span>01</span>
           <span>A conversa</span>
@@ -194,8 +306,9 @@ export default function Home() {
             Sem palco. Sem palestra. <em>À mesa.</em>
           </h2>
           <p>
-            Uma conversa direta, entre pares, sobre o que já funciona — e o que
-            ainda precisa mudar para a marca seguir crescendo.
+            A noite começa com uma pergunta simples e segue sem roteiro rígido.
+            Experiências reais entram na conversa, com espaço para decisões que
+            raramente cabem em uma reunião.
           </p>
         </div>
 
@@ -225,7 +338,10 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="curation section section--light">
+      <section
+        className="curation section section--light snap-section"
+        id="curadoria"
+      >
         <div className="section__index section__index--dark" data-reveal>
           <span>02</span>
           <span>A curadoria</span>
@@ -235,19 +351,19 @@ export default function Home() {
           <div data-reveal>
             <p className="eyebrow eyebrow--dark">Quem estará à mesa</p>
             <h2>
-              Uma mesa com quem já construiu muito — e ainda tem decisões
-              grandes pela frente.
+              Uma mesa com quem já construiu muito. E ainda tem decisões grandes
+              pela frente.
             </h2>
           </div>
           <div className="curation__copy" data-reveal>
             <p>
               Sócios, fundadores e líderes de e-commerce de marcas com loja
-              própria e operação madura.
+              própria e operação madura participam da noite.
             </p>
             <p>
-              Prospects e clientes Next dividem a mesa. A troca acontece entre
-              quem está decidindo os próximos passos e quem já viveu parte
-              deles.
+              Prospects e clientes Next dividem a conversa. Uns trazem os
+              desafios que estão vivendo. Outros compartilham o que aprenderam
+              na prática.
             </p>
             <div className="invitation-note">
               <span>Convite pessoal</span>
@@ -257,7 +373,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="next-bridge section">
+      <section className="next-bridge section snap-section" id="next">
         <div className="section__index" data-reveal>
           <span>03</span>
           <span>O próximo movimento</span>
@@ -269,9 +385,9 @@ export default function Home() {
             Para crescer sem perder <em>o comando.</em>
           </h2>
           <p>
-            Quando a operação ganha escala, crescer deixa de ser só vender mais.
-            É preciso ter autonomia para decidir, estrutura para aguentar o
-            ritmo e gente próxima quando a escolha é importante.
+            Quando a operação ganha escala, crescer deixa de ser apenas vender
+            mais. É preciso ter autonomia para decidir, estrutura para sustentar
+            o ritmo e um time próximo quando a escolha é importante.
           </p>
         </div>
 
@@ -289,7 +405,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="venue section">
+      <section className="venue section snap-section" id="local">
         <div className="section__index" data-reveal>
           <span>04</span>
           <span>O lugar</span>
@@ -302,7 +418,7 @@ export default function Home() {
           </h2>
           <p>
             No subsolo do Farol Santander, um dos espaços mais singulares de São
-            Paulo recebe uma mesa formada para esta noite.
+            Paulo recebe uma mesa formada especialmente para esta noite.
           </p>
         </div>
 
@@ -329,13 +445,17 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="rsvp section section--light" id="rsvp">
+      <section
+        className="rsvp section section--light snap-section"
+        id="rsvp"
+        data-cta-suppress
+      >
         <div className="rsvp__copy" data-reveal>
           <p className="eyebrow eyebrow--dark">RSVP</p>
           <h2>Seu lugar está à mesa.</h2>
           <p>
-            Confirme sua presença até 25/08. Assim que confirmar, você recebe
-            por e-mail os detalhes do encontro e o convite de agenda.
+            Confirme sua presença até 25/08. Depois da confirmação, os detalhes
+            do encontro e o convite de agenda chegam por e-mail.
           </p>
         </div>
 
@@ -357,13 +477,37 @@ export default function Home() {
         </div>
       </section>
 
-      <footer>
-        <Brand />
-        <p>Uma conversa sobre os próximos movimentos de quem já é referência.</p>
-        <span>São Paulo · 2026</span>
+      <footer className="site-footer snap-section" data-cta-suppress>
+        <div className="site-footer__main">
+          <div className="site-footer__brand">
+            <Brand />
+            <p>Uma noite entre quem decide os próximos passos do e-commerce.</p>
+          </div>
+
+          <div className="site-footer__event">
+            <span>Encontro reservado</span>
+            <strong>27 de agosto · Bar do Cofre</strong>
+            <p>Farol Santander · São Paulo</p>
+          </div>
+
+          <nav className="site-footer__social" aria-label="Redes da Nuvemshop">
+            <span>Siga a Nuvemshop</span>
+            {socialLinks.map(([label, url]) => (
+              <a href={url} target="_blank" rel="noreferrer" key={label}>
+                {label}
+                <span aria-hidden="true">↗</span>
+              </a>
+            ))}
+          </nav>
+        </div>
+
+        <div className="site-footer__bottom">
+          <span>© 2026 Nuvemshop</span>
+          <a href="#inicio">Voltar ao início ↑</a>
+        </div>
       </footer>
 
-      <button className="mobile-rsvp" onClick={openRsvp}>
+      <button className="mobile-rsvp" onClick={openRsvp} ref={mobileCtaRef}>
         Confirmar presença
         <span aria-hidden="true">↗</span>
       </button>
@@ -388,8 +532,7 @@ export default function Home() {
             <span>27.08</span>
             <h2>Tudo certo. Sua presença está confirmada.</h2>
             <p>
-              Você receberá por e-mail os detalhes do encontro e o convite de
-              agenda.
+              Os detalhes do encontro e o convite de agenda chegarão por e-mail.
             </p>
             <button className="button button--blue" onClick={closeRsvp}>
               Voltar à página
@@ -402,12 +545,9 @@ export default function Home() {
               <h2>Confirme sua presença.</h2>
               <p>
                 Dois lugares estão reservados para a sua marca. Preencha seus
-                dados e, se já souber, inclua o nome de quem vai acompanhar
-                você.
+                dados e, se já souber, informe quem acompanhará você.
               </p>
-              <small>
-                Prévia: o formulário ainda não envia dados ao HubSpot.
-              </small>
+              <small>Prévia: o formulário ainda não envia dados ao HubSpot.</small>
             </div>
 
             <form onSubmit={confirmRsvp}>

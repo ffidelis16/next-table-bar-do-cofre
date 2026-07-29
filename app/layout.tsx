@@ -9,8 +9,8 @@ export const metadata: Metadata = {
   description:
     "Um jantar reservado para líderes de e-commerce trocarem decisões, impasses e caminhos para o próximo ano.",
   icons: {
-    icon: "/favicon.svg",
-    shortcut: "/favicon.svg",
+    icon: "/favicon-next.ico",
+    shortcut: "/favicon-next.ico",
   },
   openGraph: {
     title: "Nuvemshop Next no Bar do Cofre | 27.08",
