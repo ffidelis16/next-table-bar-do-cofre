@@ -23,14 +23,8 @@ function Brand({ theme = "dark" }: BrandProps) {
 
 const tableFacts = [
   ["30", "lugares"],
-  ["~15", "marcas"],
-  ["02", "representantes por marca"],
-];
-
-const nextPillars = [
-  ["01", "Controle para conduzir a operação"],
-  ["02", "Infraestrutura pronta para picos e escala"],
-  ["03", "Um time Next próximo das decisões"],
+  ["15", "marcas convidadas"],
+  ["02", "lugares por marca"],
 ];
 
 const socialLinks = [
@@ -241,8 +235,9 @@ export default function Home() {
             </span>
           </h1>
           <p className="hero__lead">
-            Um jantar reservado para líderes de e-commerce conversarem sobre
-            decisões, impasses e caminhos para o próximo ano.
+            Em 27 de agosto, cerca de 15 marcas se encontram no Bar do Cofre para
+            falar, com franqueza, sobre o que o próximo ano vai exigir de cada
+            uma.
           </p>
 
           <div className="hero__details" aria-label="Informações do evento">
@@ -261,7 +256,9 @@ export default function Home() {
               Confirmar presença
               <span aria-hidden="true">↗</span>
             </button>
-            <p>Convite nominal · Dois lugares por marca · Até 25/08</p>
+            <p>
+              Convite nominal · Dois lugares por marca · Confirmação até 25/08
+            </p>
           </div>
         </div>
 
@@ -289,7 +286,7 @@ export default function Home() {
         </div>
 
         <a className="hero__scroll" href="#conversa">
-          <span>Próximo capítulo</span>
+          <span>Conheça a noite</span>
           <i aria-hidden="true" />
         </a>
       </section>
@@ -301,20 +298,21 @@ export default function Home() {
         </div>
 
         <div className="conversation__statement" data-reveal>
-          <p className="eyebrow">O formato</p>
+          <p className="eyebrow">A conversa</p>
           <h2>
-            Sem palco. Sem palestra. <em>À mesa.</em>
+            Há conversas que não são abertas ao público.{" "}
+            <em>Esta é uma delas.</em>
           </h2>
           <p>
-            A noite começa com uma pergunta simples e segue sem roteiro rígido.
-            Experiências reais entram na conversa, com espaço para decisões que
-            raramente cabem em uma reunião.
+            A noite começa com uma pergunta e segue sem roteiro fechado. Sócios,
+            fundadores e líderes de e-commerce conduzem a conversa a partir das
+            escolhas que hoje desafiam suas marcas.
           </p>
         </div>
 
-        <div className="question-stage">
+        <div className="question-stage snap-point">
           <blockquote data-reveal>
-            <span>A pergunta que abre a mesa</span>
+            <span>A pergunta que abre a noite</span>
             “Se você pudesse destravar um único gargalo para crescer no próximo
             ano, qual seria?”
           </blockquote>
@@ -349,25 +347,23 @@ export default function Home() {
 
         <div className="curation__grid">
           <div data-reveal>
-            <p className="eyebrow eyebrow--dark">Quem estará à mesa</p>
+            <p className="eyebrow eyebrow--dark">Quem participa</p>
             <h2>
-              Uma mesa com quem já construiu muito. E ainda tem decisões grandes
-              pela frente.
+              Um encontro entre pares, <em>formado com critério.</em>
             </h2>
           </div>
           <div className="curation__copy" data-reveal>
             <p>
-              Sócios, fundadores e líderes de e-commerce de marcas com loja
-              própria e operação madura participam da noite.
+              Serão cerca de 15 marcas com loja própria e operações maduras,
+              representadas por sócios, fundadores e líderes de e-commerce.
             </p>
             <p>
-              Prospects e clientes Next dividem a conversa. Uns trazem os
-              desafios que estão vivendo. Outros compartilham o que aprenderam
-              na prática.
+              Algumas já crescem com a Nuvemshop Next e trazem à conversa a
+              experiência de quem enfrentou escolhas semelhantes.
             </p>
             <div className="invitation-note">
-              <span>Convite pessoal</span>
-              <strong>Cerca de 15 marcas. Dois lugares por marca.</strong>
+              <span>Convite nominal</span>
+              <strong>Dois lugares reservados por marca.</strong>
             </div>
           </div>
         </div>
@@ -376,32 +372,24 @@ export default function Home() {
       <section className="next-bridge section snap-section" id="next">
         <div className="section__index" data-reveal>
           <span>03</span>
-          <span>O próximo movimento</span>
+          <span>Por que este encontro</span>
         </div>
 
         <div className="next-bridge__headline" data-reveal>
           <Brand />
           <h2>
-            Para crescer sem perder <em>o comando.</em>
+            Depois de certa escala, as respostas{" "}
+            <em>deixam de vir prontas.</em>
           </h2>
           <p>
-            Quando a operação ganha escala, crescer deixa de ser apenas vender
-            mais. É preciso ter autonomia para decidir, estrutura para sustentar
-            o ritmo e um time próximo quando a escolha é importante.
+            Operação, tecnologia e estratégia passam a exigir escolhas próprias.
+            A Nuvemshop Next criou este encontro para aproximar quem já vive essa
+            complexidade.
           </p>
         </div>
 
-        <div className="next-pillars" data-reveal>
-          {nextPillars.map(([number, text], index) => (
-            <div
-              className="next-pillars__item"
-              key={number}
-              style={{ "--item-index": index } as React.CSSProperties}
-            >
-              <span>{number}</span>
-              <strong>{text}</strong>
-            </div>
-          ))}
+        <div className="next-bridge__symbol" aria-hidden="true">
+          <img src="/assets/keyhole-blue.webp" alt="" loading="lazy" />
         </div>
       </section>
 
@@ -414,11 +402,12 @@ export default function Home() {
         <div className="venue__heading" data-reveal>
           <p className="eyebrow">Bar do Cofre · Farol Santander</p>
           <h2>
-            O Bar do Cofre abre as portas para uma conversa que pede reserva.
+            Uma mesa de 30 lugares dentro do{" "}
+            <em>antigo cofre do Farol Santander.</em>
           </h2>
           <p>
-            No subsolo do Farol Santander, um dos espaços mais singulares de São
-            Paulo recebe uma mesa formada especialmente para esta noite.
+            No subsolo do edifício, entre portas monumentais e caixas de depósito
+            preservadas, o Bar do Cofre dá à noite o grau certo de reserva.
           </p>
         </div>
 
@@ -452,10 +441,12 @@ export default function Home() {
       >
         <div className="rsvp__copy" data-reveal>
           <p className="eyebrow eyebrow--dark">RSVP</p>
-          <h2>Seu lugar está à mesa.</h2>
+          <h2>
+            Dois lugares já estão reservados para <em>a sua marca.</em>
+          </h2>
           <p>
-            Confirme sua presença até 25/08. Depois da confirmação, os detalhes
-            do encontro e o convite de agenda chegam por e-mail.
+            Confirme sua presença até 25/08. Os detalhes do encontro e o convite
+            de agenda chegam por e-mail logo após a confirmação.
           </p>
         </div>
 
@@ -473,7 +464,7 @@ export default function Home() {
             Confirmar presença
             <span aria-hidden="true">↗</span>
           </button>
-          <small>Convite nominal · Dois representantes por marca</small>
+          <small>Convite nominal · Até dois representantes por marca</small>
         </div>
       </section>
 
@@ -481,7 +472,7 @@ export default function Home() {
         <div className="site-footer__main">
           <div className="site-footer__brand">
             <Brand />
-            <p>Uma noite entre quem decide os próximos passos do e-commerce.</p>
+            <p>Uma noite entre quem decide o futuro do e-commerce no Brasil.</p>
           </div>
 
           <div className="site-footer__event">
@@ -530,9 +521,10 @@ export default function Home() {
         {confirmed ? (
           <div className="success-state" aria-live="polite">
             <span>27.08</span>
-            <h2>Tudo certo. Sua presença está confirmada.</h2>
+            <h2>Presença confirmada.</h2>
             <p>
-              Os detalhes do encontro e o convite de agenda chegarão por e-mail.
+              Os detalhes da noite e o convite de agenda serão enviados por
+              e-mail.
             </p>
             <button className="button button--blue" onClick={closeRsvp}>
               Voltar à página
@@ -544,8 +536,8 @@ export default function Home() {
               <p className="eyebrow eyebrow--dark">RSVP · 27.08</p>
               <h2>Confirme sua presença.</h2>
               <p>
-                Dois lugares estão reservados para a sua marca. Preencha seus
-                dados e, se já souber, informe quem acompanhará você.
+                Este convite reserva até dois lugares para a sua marca. Informe
+                seus dados e, se desejar, o nome de quem estará com você.
               </p>
               <small>Prévia: o formulário ainda não envia dados ao HubSpot.</small>
             </div>

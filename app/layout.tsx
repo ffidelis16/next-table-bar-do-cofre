@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   ),
   title: "Nuvemshop Next no Bar do Cofre | 27.08",
   description:
-    "Um jantar reservado para líderes de e-commerce trocarem decisões, impasses e caminhos para o próximo ano.",
+    "Cerca de 15 marcas reunidas no Bar do Cofre para uma conversa sobre o que o próximo ano vai exigir.",
   icons: {
     icon: "/favicon-next.ico",
     shortcut: "/favicon-next.ico",
@@ -51,7 +51,7 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500;1,6..96,500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
           rel="stylesheet"
         />
       </head>
