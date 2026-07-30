@@ -35,10 +35,23 @@ test("renderiza a LP RSVP com conteúdo essencial", async () => {
   );
   assert.match(html, /Os próximos movimentos de quem já é referência/);
   assert.match(html, /Há conversas que não são abertas ao público/);
+  assert.match(html, /quem lidera o e-commerce de marcas de varejo/);
+  assert.match(html, /Varejo e e-commerce/);
+  assert.match(html, /Marcas que compartilham desafios de escala/);
+  assert.match(html, /quem responde pelo/);
+  assert.match(html, /e-commerce da marca/);
   assert.match(html, /Depois de certa escala, as respostas/);
   assert.match(html, /30/);
   assert.match(html, /Confirmar presença/);
-  assert.doesNotMatch(html, /Prospects|Para crescer sem perder o comando/);
+  assert.doesNotMatch(
+    html,
+    /Prospects|Para crescer sem perder o comando|Dois lugares já estão reservados/,
+  );
+  assert.equal(
+    (html.match(/Dois lugares por marca/g) ?? []).length,
+    1,
+    "a informação sobre dois lugares deve aparecer apenas na Hero",
+  );
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/i);
 });
 

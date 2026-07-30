@@ -911,6 +911,19 @@ blockquote span {
   line-height: 0.8;
 }
 
+.factline__item--compact {
+  align-items: center;
+}
+
+.factline__item--compact strong {
+  max-width: 220px;
+  font-family: var(--sans);
+  font-size: clamp(1.35rem, 2.1vw, 2rem);
+  font-style: normal;
+  font-weight: 600;
+  line-height: 1.08;
+}
+
 .factline span {
   max-width: 150px;
   color: var(--text-on-dark-secondary);
@@ -2050,6 +2063,12 @@ html[data-motion="on"] .factline[data-reveal].is-visible .factline__item {
 
   .factline strong {
     min-width: 88px;
+  }
+
+  .factline__item--compact strong {
+    min-width: 0;
+    max-width: 170px;
+    font-size: 1.45rem;
   }
 
   .curation__grid {

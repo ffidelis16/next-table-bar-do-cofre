@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   ),
   title: "Nuvemshop Next no Bar do Cofre | 27.08",
   description:
-    "Cerca de 15 marcas reunidas no Bar do Cofre para uma conversa sobre o que o próximo ano vai exigir.",
+    "Cerca de 15 marcas de varejo reunidas no Bar do Cofre para uma conversa entre quem lidera operações maduras de e-commerce.",
   icons: {
     icon: "/favicon-next.ico",
     shortcut: "/favicon-next.ico",

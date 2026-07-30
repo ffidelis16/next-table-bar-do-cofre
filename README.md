@@ -1,98 +1,64 @@
-# vinext-starter
+# Nuvemshop Next · Bar do Cofre
 
-A clean full-stack starter running on
-[vinext](https://github.com/cloudflare/vinext), with optional Cloudflare D1 and
-Drizzle support.
+Landing page de RSVP para o jantar reservado da Nuvemshop Next no Bar do
+Cofre, no Farol Santander, em São Paulo.
 
-## Prerequisites
+[Abrir página pública](https://ffidelis16.github.io/next-table-bar-do-cofre/)
 
-- Node.js `>=22.13.0`
+## Proposta
 
-## Quick Start
+A página apresenta um encontro para sócios, fundadores e lideranças
+responsáveis pelo e-commerce de marcas de varejo. O conceito visual parte do
+cofre como metáfora de curadoria, reserva e decisões de valor.
+
+O encontro reúne cerca de 15 marcas em uma conversa sem palco e sem roteiro
+fechado, conduzida pelos desafios que essas operações enfrentam.
+
+## Versão corrigida de copy
+
+Revisão aprovada em 30 de julho de 2026:
+
+- identificação do público antecipada para a Hero;
+- presença mais clara de varejo e e-commerce ao longo da narrativa;
+- redução das menções aos dois lugares por marca;
+- informação sobre os dois lugares mantida apenas na Hero;
+- fechamento do RSVP direcionado a quem responde pelo e-commerce da marca;
+- preservação do conceito, da estrutura e da atmosfera visual aprovados.
+
+## Estrutura
+
+- Hero e informações do encontro
+- A conversa e a pergunta condutora
+- Composição e curadoria da mesa
+- Contexto Nuvemshop Next
+- Bar do Cofre e endereço
+- RSVP
+
+## Desenvolvimento
 
 ```bash
 npm install
 npm run dev
-npm run build
 ```
 
-This starter does not use `wrangler.jsonc`.
+Validação:
 
-## Included Shape
-
-- edit site code under `app/`
-- `.openai/hosting.json` declares optional Sites D1 and R2 bindings
-- `vite.config.ts` simulates declared bindings for local development
-- `db/schema.ts` starts intentionally empty
-- `examples/d1/` contains an optional D1 example surface
-- `drizzle.config.ts` supports local migration generation when needed
-
-## Workspace Auth Headers
-
-OpenAI workspace sites can read the current user's email from
-`oai-authenticated-user-email`.
-
-SIWC-authenticated workspace sites may also receive
-`oai-authenticated-user-full-name` when the user's SIWC profile has a non-empty
-`name` claim. The full-name value is percent-encoded UTF-8 and is accompanied by
-`oai-authenticated-user-full-name-encoding: percent-encoded-utf-8`.
-
-Treat the full name as optional and fall back to email when it is absent:
-
-```tsx
-import { headers } from "next/headers";
-
-export default async function Home() {
-  const requestHeaders = await headers();
-  const email = requestHeaders.get("oai-authenticated-user-email");
-  const encodedFullName = requestHeaders.get("oai-authenticated-user-full-name");
-  const fullName =
-    encodedFullName &&
-    requestHeaders.get("oai-authenticated-user-full-name-encoding") ===
-      "percent-encoded-utf-8"
-      ? decodeURIComponent(encodedFullName)
-      : null;
-
-  const displayName = fullName ?? email;
-  // ...
-}
+```bash
+npm test
+npm run lint
 ```
 
-## Optional Dispatch-Owned ChatGPT Sign-In
+## Publicação no GitHub Pages
 
-Import the ready-to-use helpers from `app/chatgpt-auth.ts` when the site needs
-optional or required ChatGPT sign-in:
+A versão estática é gerada em `docs/`:
 
-- Use `getChatGPTUser()` for optional signed-in UI.
-- Use `requireChatGPTUser(returnTo)` for server-rendered pages that should send
-  anonymous visitors through Sign in with ChatGPT.
-- Use `chatGPTSignInPath(returnTo)` and `chatGPTSignOutPath(returnTo)` for
-  browser links or actions.
-- Pass a same-origin relative `returnTo` path for the destination after sign-in
-  or sign-out. The helper validates and safely encodes it.
-- Mark protected pages with `export const dynamic = "force-dynamic"` because
-  they depend on per-request identity headers.
+```bash
+npm run export:pages
+```
 
-Dispatch owns `/signin-with-chatgpt`, `/signout-with-chatgpt`, `/callback`, the
-OAuth cookies, and identity header injection. Do not implement app routes for
-those reserved paths. Routes that do not import and call the helper remain
-anonymous-compatible.
+O GitHub Pages publica a pasta `docs/` da branch `main`.
 
-SIWC establishes identity only; it does not prove workspace membership. Use the
-Sites hosting platform's access policy controls for workspace-wide restrictions,
-or enforce explicit server-side membership or allowlist checks.
+## Observação sobre o formulário
 
-Use SIWC for account pages, user-specific dashboards, saved records, and write
-actions tied to the current ChatGPT user. Leave public content anonymous.
-
-## Useful Commands
-
-- `npm run dev`: start local development
-- `npm run build`: verify the vinext build output
-- `npm test`: build the starter and verify its rendered loading skeleton
-- `npm run db:generate`: generate Drizzle migrations after schema changes
-
-## Learn More
-
-- [vinext Documentation](https://github.com/cloudflare/vinext)
-- [Drizzle D1 Guide](https://orm.drizzle.team/docs/get-started/d1-new)
+O formulário presente nesta versão é uma prévia de interface e ainda não envia
+dados ao HubSpot.

@@ -22,9 +22,13 @@ function Brand({ theme = "dark" }: BrandProps) {
 }
 
 const tableFacts = [
-  ["30", "lugares"],
-  ["15", "marcas convidadas"],
-  ["02", "lugares por marca"],
+  { value: "30", label: "lugares" },
+  { value: "15", label: "marcas convidadas" },
+  {
+    value: "Varejo e e-commerce",
+    label: "em uma mesma mesa",
+    compact: true,
+  },
 ];
 
 const socialLinks = [
@@ -235,9 +239,9 @@ export default function Home() {
             </span>
           </h1>
           <p className="hero__lead">
-            Em 27 de agosto, cerca de 15 marcas se encontram no Bar do Cofre para
-            falar, com franqueza, sobre o que o próximo ano vai exigir de cada
-            uma.
+            Em 27 de agosto, o Bar do Cofre recebe sócios, fundadores e quem
+            lidera o e-commerce de marcas de varejo. Uma conversa franca sobre o
+            que o próximo ano vai exigir de cada operação.
           </p>
 
           <div className="hero__details" aria-label="Informações do evento">
@@ -304,9 +308,9 @@ export default function Home() {
             <em>Esta é uma delas.</em>
           </h2>
           <p>
-            A noite começa com uma pergunta e segue sem roteiro fechado. Sócios,
-            fundadores e líderes de e-commerce conduzem a conversa a partir das
-            escolhas que hoje desafiam suas marcas.
+            A noite começa com uma pergunta e segue sem roteiro fechado. Os
+            desafios de quem conduz operações maduras de e-commerce dão o rumo
+            da conversa.
           </p>
         </div>
 
@@ -323,13 +327,15 @@ export default function Home() {
           aria-label="Composição da mesa"
           data-reveal
         >
-          {tableFacts.map(([number, label], index) => (
+          {tableFacts.map(({ value, label, compact }, index) => (
             <div
-              className="factline__item"
+              className={`factline__item${
+                compact ? " factline__item--compact" : ""
+              }`}
               key={label}
               style={{ "--item-index": index } as React.CSSProperties}
             >
-              <strong>{number}</strong>
+              <strong>{value}</strong>
               <span>{label}</span>
             </div>
           ))}
@@ -354,16 +360,17 @@ export default function Home() {
           </div>
           <div className="curation__copy" data-reveal>
             <p>
-              Serão cerca de 15 marcas com loja própria e operações maduras,
-              representadas por sócios, fundadores e líderes de e-commerce.
+              A curadoria reúne marcas de varejo com e-commerce próprio. À mesa
+              estarão sócios, fundadores e líderes que respondem pelo crescimento
+              do negócio.
             </p>
             <p>
-              Algumas já crescem com a Nuvemshop Next e trazem à conversa a
-              experiência de quem enfrentou escolhas semelhantes.
+              Algumas já são clientes Nuvemshop Next e trazem para a mesa a
+              experiência de quem enfrenta desafios semelhantes.
             </p>
             <div className="invitation-note">
-              <span>Convite nominal</span>
-              <strong>Dois lugares reservados por marca.</strong>
+              <span>Curadoria Nuvemshop Next</span>
+              <strong>Marcas que compartilham desafios de escala.</strong>
             </div>
           </div>
         </div>
@@ -382,9 +389,9 @@ export default function Home() {
             <em>deixam de vir prontas.</em>
           </h2>
           <p>
-            Operação, tecnologia e estratégia passam a exigir escolhas próprias.
-            A Nuvemshop Next criou este encontro para aproximar quem já vive essa
-            complexidade.
+            Cada operação passa a pedir decisões próprias sobre tecnologia,
+            eficiência e crescimento. Este encontro aproxima quem já enfrenta
+            essas escolhas.
           </p>
         </div>
 
@@ -442,11 +449,12 @@ export default function Home() {
         <div className="rsvp__copy" data-reveal>
           <p className="eyebrow eyebrow--dark">RSVP</p>
           <h2>
-            Dois lugares já estão reservados para <em>a sua marca.</em>
+            Este convite é para quem responde pelo{" "}
+            <em>e-commerce da marca.</em>
           </h2>
           <p>
-            Confirme sua presença até 25/08. Os detalhes do encontro e o convite
-            de agenda chegam por e-mail logo após a confirmação.
+            Confirme sua presença até 25/08. Você receberá por e-mail os detalhes
+            do encontro e o convite de agenda.
           </p>
         </div>
 
@@ -464,7 +472,7 @@ export default function Home() {
             Confirmar presença
             <span aria-hidden="true">↗</span>
           </button>
-          <small>Convite nominal · Até dois representantes por marca</small>
+          <small>Convite nominal · Encontro reservado</small>
         </div>
       </section>
 
@@ -536,8 +544,8 @@ export default function Home() {
               <p className="eyebrow eyebrow--dark">RSVP · 27.08</p>
               <h2>Confirme sua presença.</h2>
               <p>
-                Este convite reserva até dois lugares para a sua marca. Informe
-                seus dados e, se desejar, o nome de quem estará com você.
+                Informe seus dados para confirmar sua presença e, se desejar, o
+                nome de quem estará com você.
               </p>
               <small>Prévia: o formulário ainda não envia dados ao HubSpot.</small>
             </div>
