@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   ),
   title: "Nuvemshop Next no Bar do Cofre | 27.08",
   description:
-    "Cerca de 15 marcas de varejo reunidas no Bar do Cofre para uma conversa entre quem lidera operações maduras de e-commerce.",
+    "Um jantar reservado no Bar do Cofre com executivos da Nuvemshop e líderes de marcas selecionadas que faturam milhões por ano. 27 de agosto, às 19h, em São Paulo.",
   icons: {
     icon: "/favicon-next.ico",
     shortcut: "/favicon-next.ico",
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Nuvemshop Next no Bar do Cofre | 27.08",
     description:
-      "Os próximos movimentos de quem já é referência começam à mesa.",
+      "Você acaba de receber a chave para um momento exclusivo.",
     locale: "pt_BR",
     type: "website",
     images: [
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Nuvemshop Next no Bar do Cofre | 27.08",
     description:
-      "Os próximos movimentos de quem já é referência começam à mesa.",
+      "Você acaba de receber a chave para um momento exclusivo.",
     images: ["/og.png"],
   },
 };

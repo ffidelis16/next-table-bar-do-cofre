@@ -46,13 +46,30 @@ function Brand({ theme = "dark" }: BrandProps) {
 }
 
 const tableFacts = [
-  { value: "30", label: "lugares" },
-  { value: "15", label: "marcas convidadas" },
+  { value: "Cerca de 15", label: "Marcas convidadas" },
+  { value: "Executivos", label: "Da Nuvemshop" },
   {
-    value: "Varejo e e-commerce",
-    label: "em uma mesma mesa",
+    value: "Sócios, fundadores e líderes",
+    label: "De e-commerce",
     compact: true,
   },
+];
+
+const venueFacts = [
+  { value: "16 t", label: "Cada porta circular" },
+  { value: "Mais de 2.000", label: "Cofres originais" },
+  { value: "1", label: "Bar dentro do antigo cofre-forte" },
+];
+
+const clientBrands = [
+  { name: "PA Concept", logo: "/assets/brands/pa-concept.webp" },
+  { name: "Lilly Sarti", logo: "/assets/brands/lilly-sarti.webp" },
+  { name: "Les Cloches", logo: "/assets/brands/les-cloches.webp" },
+  { name: "Kings Sneakers", logo: "/assets/brands/kings.webp" },
+  { name: "HISHA", logo: "/assets/brands/hisha.webp" },
+  { name: "Wishin", logo: "/assets/brands/wishin.webp" },
+  { name: "Ryzí", logo: "/assets/brands/ryzi.webp" },
+  { name: "Calma SP", logo: "/assets/brands/calma-sp.webp" },
 ];
 
 const socialLinks = [
@@ -238,7 +255,7 @@ export default function Home() {
 
   return (
     <main>
-      <a className="skip-link" href="#conversa">
+      <a className="skip-link" href="#local">
         Ir para o conteúdo
       </a>
 
@@ -269,7 +286,8 @@ export default function Home() {
           </a>
 
           <p className="header-context">
-            27 de agosto <span>·</span> Bar do Cofre <span>·</span> São Paulo
+            27 de agosto <span>·</span> 19h <span>·</span>{" "}
+            <strong>Bar do Cofre</strong> <span>·</span> São Paulo
           </p>
 
           <button
@@ -290,14 +308,14 @@ export default function Home() {
             id="site-nav"
             aria-label="Navegação principal"
           >
-            <a href="#conversa" onClick={closeMenu}>
-              A conversa
-            </a>
-            <a href="#curadoria" onClick={closeMenu}>
-              Curadoria
-            </a>
             <a href="#local" onClick={closeMenu}>
               O lugar
+            </a>
+            <a href="#mesa" onClick={closeMenu}>
+              À mesa
+            </a>
+            <a href="#marcas" onClick={closeMenu}>
+              Marcas Nuvemshop
             </a>
             <button
               className="button button--small button--header"
@@ -313,29 +331,31 @@ export default function Home() {
         <div className="hero__content">
           <p className="eyebrow">Nuvemshop Next convida</p>
           <h1>
-            <span className="hero__line">Os próximos</span>
-            <span className="hero__line">movimentos de</span>
+            <span className="hero__line">Você acaba de</span>
+            <span className="hero__line">receber a chave para</span>
+            <span className="hero__line">um momento</span>
             <span className="hero__line">
-              quem já é <span className="mobile-break">referência</span>
-            </span>
-            <span className="hero__line">
-              começam <em>à mesa.</em>
+              <em>exclusivo.</em>
             </span>
           </h1>
           <p className="hero__lead">
-            Em 27 de agosto, o Bar do Cofre recebe sócios, fundadores e quem
-            lidera o e-commerce de marcas de varejo. Uma conversa franca sobre o
-            que o próximo ano vai exigir de cada operação.
+            Foi dentro deste cofre que decidimos abrir uma porta que normalmente
+            fica fechada: a das Marcas Aspiracionais da Nuvemshop.
+          </p>
+          <p className="hero__qualifier">
+            Em 27 de agosto, executivos da Nuvemshop recebem sócios, fundadores e
+            líderes de e-commerce de marcas selecionadas que faturam milhões por
+            ano.
           </p>
 
           <div className="hero__details" aria-label="Informações do evento">
             <div>
               <span>Quando</span>
-              <strong>27 de agosto</strong>
+              <strong>27 de agosto · 19h</strong>
             </div>
             <div>
               <span>Onde</span>
-              <strong>Bar do Cofre · São Paulo</strong>
+              <strong>Bar do Cofre · Farol Santander</strong>
             </div>
           </div>
 
@@ -355,7 +375,6 @@ export default function Home() {
           <div className="portal__ring portal__ring--outer" aria-hidden="true" />
           <div className="portal__ring portal__ring--middle" aria-hidden="true" />
           <div className="portal__ring portal__ring--inner" aria-hidden="true" />
-          <div className="portal__ticks" aria-hidden="true" />
           <div className="portal__window">
             <img
               className="portal__interior"
@@ -373,135 +392,51 @@ export default function Home() {
           <div className="portal__rim" aria-hidden="true" />
         </div>
 
-        <a className="hero__scroll" href="#conversa">
+        <a className="hero__scroll" href="#local">
           <span>Conheça a noite</span>
           <i aria-hidden="true" />
         </a>
       </section>
 
-      <section className="conversation section snap-section" id="conversa">
-        <div className="section__index" data-reveal>
-          <span>01</span>
-          <span>A conversa</span>
-        </div>
-
-        <div className="conversation__statement" data-reveal>
-          <p className="eyebrow">A conversa</p>
-          <h2>
-            Há conversas que não são abertas ao público.{" "}
-            <em>Esta é uma delas.</em>
-          </h2>
-          <p>
-            A noite começa com uma pergunta e segue sem roteiro fechado. Os
-            desafios de quem conduz operações maduras de e-commerce dão o rumo
-            da conversa.
-          </p>
-        </div>
-
-        <div className="question-stage snap-point">
-          <blockquote data-reveal>
-            <span>A pergunta que abre a noite</span>
-            “Se você pudesse destravar um único gargalo para crescer no próximo
-            ano, qual seria?”
-          </blockquote>
-        </div>
-
-        <div
-          className="factline"
-          aria-label="Composição da mesa"
-          data-reveal
-        >
-          {tableFacts.map(({ value, label, compact }, index) => (
-            <div
-              className={`factline__item${
-                compact ? " factline__item--compact" : ""
-              }`}
-              key={label}
-              style={{ "--item-index": index } as React.CSSProperties}
-            >
-              <strong>{value}</strong>
-              <span>{label}</span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section
-        className="curation section section--light snap-section"
-        id="curadoria"
-      >
-        <div className="section__index section__index--dark" data-reveal>
-          <span>02</span>
-          <span>A curadoria</span>
-        </div>
-
-        <div className="curation__grid">
-          <div data-reveal>
-            <p className="eyebrow eyebrow--dark">Quem participa</p>
-            <h2>
-              Um encontro entre pares, <em>formado com critério.</em>
-            </h2>
-          </div>
-          <div className="curation__copy" data-reveal>
-            <p>
-              A curadoria reúne marcas de varejo com e-commerce próprio. À mesa
-              estarão sócios, fundadores e líderes que respondem pelo crescimento
-              do negócio.
-            </p>
-            <p>
-              Algumas já são clientes Nuvemshop Next e trazem para a mesa a
-              experiência de quem enfrenta desafios semelhantes.
-            </p>
-            <div className="invitation-note">
-              <span>Curadoria Nuvemshop Next</span>
-              <strong>Marcas que compartilham desafios de escala.</strong>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="next-bridge section snap-section" id="next">
-        <div className="section__index" data-reveal>
-          <span>03</span>
-          <span>Por que este encontro</span>
-        </div>
-
-        <div className="next-bridge__headline" data-reveal>
-          <Brand />
-          <h2>
-            Depois de certa escala, as respostas{" "}
-            <em>deixam de vir prontas.</em>
-          </h2>
-          <p>
-            Cada operação passa a pedir decisões próprias sobre tecnologia,
-            eficiência e crescimento. Este encontro aproxima quem já enfrenta
-            essas escolhas.
-          </p>
-        </div>
-
-        <div className="next-bridge__symbol" aria-hidden="true">
-          <img src="/assets/keyhole-blue.webp" alt="" loading="lazy" />
-        </div>
-      </section>
-
       <section className="venue section snap-section" id="local">
         <div className="section__index" data-reveal>
-          <span>04</span>
+          <span>01</span>
           <span>O lugar</span>
         </div>
 
         <div className="venue__heading" data-reveal>
           <p className="eyebrow">Bar do Cofre · Farol Santander</p>
           <h2>
-            Uma mesa de 30 lugares dentro do{" "}
-            <em>antigo cofre do Farol Santander.</em>
+            Um dos endereços mais bem guardados de São Paulo,{" "}
+            <em>aberto para poucos.</em>
           </h2>
-          <p>
-            No subsolo do edifício, entre portas monumentais e caixas de depósito
-            preservadas, o Bar do Cofre dá à noite o grau certo de reserva.
-          </p>
+          <div className="venue__copy">
+            <p>
+              No subsolo do Farol Santander, o antigo cofre-forte preserva duas
+              portas circulares de 16 toneladas e mais de 2.000 cofres de
+              aluguel. Restaurado, o espaço mantém as características que
+              revelam sua função original.
+            </p>
+            <p>
+              Hoje, esse espaço recebe um jantar reservado, com menu especial e
+              uma mesa de apenas 30 lugares.
+            </p>
+          </div>
         </div>
 
+        <div className="venue-facts" aria-label="Dados históricos do cofre">
+          {venueFacts.map(({ value, label }, index) => (
+            <div
+              className="venue-facts__item"
+              key={label}
+              style={{ "--item-index": index } as React.CSSProperties}
+              data-reveal
+            >
+              <strong>{value}</strong>
+              <span>{label}</span>
+            </div>
+          ))}
+        </div>
         <div className="venue__gallery">
           <figure className="venue__main" data-reveal="image">
             <img
@@ -518,11 +453,111 @@ export default function Home() {
             />
           </figure>
           <div className="venue__address" data-reveal>
-            <span>27.08 · São Paulo</span>
+            <span>27 de agosto de 2026 · 19h</span>
             <strong>Rua João Brícola, 24</strong>
             <p>Centro Histórico · Farol Santander</p>
+            <b>30 lugares</b>
           </div>
         </div>
+
+        <p className="venue__transition" data-reveal>
+          Um lugar que guarda parte da história de São Paulo.{" "}
+          <em>
+            Uma mesa formada por marcas relevantes para o varejo brasileiro.
+          </em>
+        </p>
+      </section>
+
+      <section
+        className="table-section section section--light snap-section"
+        id="mesa"
+      >
+        <div className="section__index section__index--dark" data-reveal>
+          <span>02</span>
+          <span>À mesa</span>
+        </div>
+
+        <div className="table-section__grid">
+          <div data-reveal>
+            <p className="eyebrow eyebrow--dark">Marcas Aspiracionais</p>
+            <h2>
+              Os próximos movimentos de quem já é referência{" "}
+              <em>começam à mesa.</em>
+            </h2>
+          </div>
+          <div className="table-section__copy" data-reveal>
+            <p>
+              A curadoria reúne cerca de 15 marcas convidadas, entre clientes
+              Next e outras operações de destaque do varejo brasileiro.
+            </p>
+          </div>
+        </div>
+
+        <div
+          className="factline factline--light"
+          aria-label="Composição da mesa"
+          data-reveal
+        >
+          {tableFacts.map(({ value, label, compact }, index) => (
+            <div
+              className={`factline__item${
+                compact ? " factline__item--compact" : ""
+              }`}
+              key={label}
+              style={{ "--item-index": index } as React.CSSProperties}
+            >
+              <strong>{value}</strong>
+              <span>{label}</span>
+            </div>
+          ))}
+        </div>
+
+        <div className="table-format" data-reveal>
+          <div>
+            <strong>Sem palco. Sem palestra. À mesa.</strong>
+            <p>
+              Um jantar reservado, com tempo para conversas mais próximas e
+              novas conexões.
+            </p>
+          </div>
+          <img
+            src="/assets/keyhole-blue.webp"
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+          />
+        </div>
+      </section>
+
+      <section className="brands-section section snap-section" id="marcas">
+        <div className="section__index" data-reveal>
+          <span>03</span>
+          <span>Marcas Nuvemshop</span>
+        </div>
+
+        <div className="brands-section__heading" data-reveal>
+          <h2>
+            Algumas marcas que já escolheram <em>a Nuvemshop.</em>
+          </h2>
+        </div>
+
+        <div className="brand-grid" aria-label="Marcas clientes Nuvemshop">
+          {clientBrands.map(({ name, logo }, index) => (
+            <div
+              className="brand-grid__item"
+              key={name}
+              data-reveal
+              style={{ "--item-index": index } as React.CSSProperties}
+            >
+              <img src={logo} alt={name} loading="lazy" />
+            </div>
+          ))}
+        </div>
+
+        <p className="brands-section__note" data-reveal>
+          As marcas exibidas são clientes Nuvemshop e não indicam presença
+          confirmada no jantar.
+        </p>
       </section>
 
       <section
@@ -533,8 +568,8 @@ export default function Home() {
         <div className="rsvp__copy" data-reveal>
           <p className="eyebrow eyebrow--dark">RSVP</p>
           <h2>
-            Este convite é para quem responde pelo{" "}
-            <em>e-commerce da marca.</em>
+            Este convite é para quem participa das{" "}
+            <em>decisões estratégicas da marca.</em>
           </h2>
           <p>
             Confirme sua presença até 25/08. Você receberá por e-mail os detalhes
@@ -548,7 +583,7 @@ export default function Home() {
             <strong>27</strong>
           </div>
           <div className="rsvp__event">
-            <span>Nuvemshop Next</span>
+            <span>27 de agosto · 19h</span>
             <strong>Bar do Cofre · Farol Santander</strong>
             <p>São Paulo</p>
           </div>
@@ -569,7 +604,7 @@ export default function Home() {
 
           <div className="site-footer__event">
             <span>Encontro reservado</span>
-            <strong>27 de agosto · Bar do Cofre</strong>
+            <strong>27 de agosto · 19h · Bar do Cofre</strong>
             <p>Farol Santander · São Paulo</p>
           </div>
 

@@ -34,19 +34,21 @@ test("renderiza a LP RSVP com conteúdo essencial", async () => {
     html,
     /<title>Nuvemshop Next no Bar do Cofre \| 27\.08<\/title>/i,
   );
+  assert.match(html, /Você acaba de receber a chave para um momento exclusivo/);
+  assert.match(html, /Marcas Aspiracionais da Nuvemshop/);
+  assert.match(html, /marcas selecionadas que faturam milhões por ano/);
+  assert.match(html, /27 de agosto · 19h/);
+  assert.match(html, /Um dos endereços mais bem guardados de São Paulo/);
+  assert.match(html, /Mais de 2\.000/);
+  assert.match(html, /A curadoria reúne cerca de 15 marcas convidadas/);
   assert.match(html, /Os próximos movimentos de quem já é referência/);
-  assert.match(html, /Há conversas que não são abertas ao público/);
-  assert.match(html, /quem lidera o e-commerce de marcas de varejo/);
-  assert.match(html, /Varejo e e-commerce/);
-  assert.match(html, /Marcas que compartilham desafios de escala/);
-  assert.match(html, /quem responde pelo/);
-  assert.match(html, /e-commerce da marca/);
-  assert.match(html, /Depois de certa escala, as respostas/);
-  assert.match(html, /30/);
+  assert.match(html, /Sem palco\. Sem palestra\. À mesa\./);
+  assert.match(html, /Algumas marcas que já escolheram/);
+  assert.match(html, /Este convite é para quem participa das/);
   assert.match(html, /Confirmar presença/);
   assert.doesNotMatch(
     html,
-    /Prospects|Para crescer sem perder o comando|Dois lugares já estão reservados/,
+    /A pergunta que abre a noite|Se você pudesse destravar|Há conversas que não são abertas ao público|Prospects|Para crescer sem perder o comando|Dois lugares já estão reservados/,
   );
   assert.equal(
     (html.match(/Dois lugares por marca/g) ?? []).length,
@@ -63,6 +65,10 @@ test("mantém imagens, marca oficial e formulário na marcação", async () => {
   assert.match(html, /vault-door-closeup\.png/);
   assert.match(html, /vault-entrance\.png/);
   assert.match(html, /keyhole-blue\.webp/);
+  assert.match(html, /brands\/pa-concept\.webp/);
+  assert.match(html, /brands\/lilly-sarti\.webp/);
+  assert.match(html, /brands\/ryzi\.webp/);
+  assert.match(html, /não indicam presença confirmada no jantar/);
   assert.match(html, /nuvemshop-logo-dark\.svg/);
   assert.match(html, /favicon-next\.ico/);
   assert.match(html, /og\.png/);

@@ -7,31 +7,30 @@ Cofre, no Farol Santander, em São Paulo.
 
 ## Proposta
 
-A página apresenta um encontro para sócios, fundadores e lideranças
-responsáveis pelo e-commerce de marcas de varejo. O conceito visual parte do
-cofre como metáfora de curadoria, reserva e decisões de valor.
+A página apresenta um jantar reservado para executivos da Nuvemshop, sócios,
+fundadores e líderes de e-commerce de marcas selecionadas que faturam milhões
+por ano. O conceito visual parte do cofre como metáfora de curadoria, reserva e
+acesso.
 
-O encontro reúne cerca de 15 marcas em uma conversa sem palco e sem roteiro
-fechado, conduzida pelos desafios que essas operações enfrentam.
+## Copy final
 
-## Versão corrigida de copy
+Revisão consolidada em 30 de julho de 2026:
 
-Revisão aprovada em 30 de julho de 2026:
-
-- identificação do público antecipada para a Hero;
-- presença mais clara de varejo e e-commerce ao longo da narrativa;
-- redução das menções aos dois lugares por marca;
-- informação sobre os dois lugares mantida apenas na Hero;
-- fechamento do RSVP direcionado a quem responde pelo e-commerce da marca;
-- preservação do conceito, da estrutura e da atmosfera visual aprovados.
+- abertura com a chave e o programa de Marcas Aspiracionais;
+- público e critério de curadoria identificados na Hero;
+- localização tratada como principal destaque da experiência;
+- horário de início incorporado aos pontos de serviço;
+- retirada da pergunta condutora e de qualquer promessa de pauta;
+- presença de marcas clientes Nuvemshop como prova social, sem sugerir
+  confirmação no jantar;
+- informação sobre os dois lugares mantida apenas na Hero.
 
 ## Estrutura
 
-- Hero e informações do encontro
-- A conversa e a pergunta condutora
-- Composição e curadoria da mesa
-- Contexto Nuvemshop Next
-- Bar do Cofre e endereço
+- Hero, perfil dos convidados e informações do encontro
+- O lugar, sua história e a experiência
+- Composição e formato da mesa
+- Marcas que já escolheram a Nuvemshop
 - RSVP
 
 ## Desenvolvimento
