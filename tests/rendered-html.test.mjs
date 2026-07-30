@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 async function render() {
@@ -66,9 +67,27 @@ test("mantém imagens, marca oficial e formulário na marcação", async () => {
   assert.match(html, /favicon-next\.ico/);
   assert.match(html, /og\.png/);
   assert.match(html, /<dialog/i);
-  assert.match(html, /E-mail corporativo/);
-  assert.match(html, /segundo representante/);
-  assert.match(html, /ainda não envia dados ao HubSpot/);
+  assert.match(html, /id="hubspotForm"/);
+  assert.match(html, /Carregando formulário/);
+  assert.doesNotMatch(html, /ainda não envia dados ao HubSpot/);
+  assert.doesNotMatch(html, /<form/i);
   assert.match(html, /linkedin\.com\/company\/nuvemshop/);
   assert.match(html, /instagram\.com\/nuvemshop/);
+});
+
+test("usa o mesmo formulário HubSpot da LP Next Sessions", async () => {
+  const pageSource = await readFile(
+    new URL("../app/page.tsx", import.meta.url),
+    "utf8",
+  );
+  const exportSource = await readFile(
+    new URL("../scripts/export-github-pages.mjs", import.meta.url),
+    "utf8",
+  );
+
+  for (const source of [pageSource, exportSource]) {
+    assert.match(source, /8180620/);
+    assert.match(source, /bdb0ccad-d2b3-471a-adf1-9187057e1ab3/);
+    assert.match(source, /js\.hsforms\.net\/forms\/embed\/v2\.js/);
+  }
 });

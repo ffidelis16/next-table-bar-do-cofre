@@ -1,6 +1,30 @@
 "use client";
 
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
+type HubSpotFormOptions = {
+  portalId: string;
+  formId: string;
+  target: string;
+  onFormReady?: () => void;
+  onFormSubmitted?: () => void;
+};
+
+declare global {
+  interface Window {
+    dataLayer?: Array<Record<string, unknown>>;
+    hbspt?: {
+      forms: {
+        create: (options: HubSpotFormOptions) => void;
+      };
+    };
+  }
+}
+
+const HUBSPOT_SCRIPT_ID = "hubspot-forms-v2";
+const HUBSPOT_SCRIPT_URL = "https://js.hsforms.net/forms/embed/v2.js";
+const HUBSPOT_PORTAL_ID = "8180620";
+const HUBSPOT_FORM_ID = "bdb0ccad-d2b3-471a-adf1-9187057e1ab3";
 
 type BrandProps = {
   theme?: "dark" | "light";
@@ -43,7 +67,7 @@ export default function Home() {
   const headerRef = useRef<HTMLElement>(null);
   const progressRef = useRef<HTMLSpanElement>(null);
   const mobileCtaRef = useRef<HTMLButtonElement>(null);
-  const [confirmed, setConfirmed] = useState(false);
+  const hubSpotRenderedRef = useRef(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -137,18 +161,78 @@ export default function Home() {
     return () => document.body.classList.remove("menu-is-open");
   }, [menuOpen]);
 
+  const renderHubSpotForm = () => {
+    if (hubSpotRenderedRef.current || !window.hbspt) return;
+
+    window.hbspt.forms.create({
+      portalId: HUBSPOT_PORTAL_ID,
+      formId: HUBSPOT_FORM_ID,
+      target: "#hubspotForm",
+      onFormReady: () => {
+        document
+          .querySelector(".hubspot-form-shell")
+          ?.classList.add("is-ready");
+      },
+      onFormSubmitted: () => {
+        window.dataLayer = window.dataLayer ?? [];
+        window.dataLayer.push({
+          event: "form_submit",
+          form_id: HUBSPOT_FORM_ID,
+        });
+        window.dataLayer.push({
+          event: "generate_lead",
+          form_id: HUBSPOT_FORM_ID,
+          value: 1,
+        });
+      },
+    });
+    hubSpotRenderedRef.current = true;
+  };
+
+  const loadHubSpotForm = () => {
+    if (hubSpotRenderedRef.current) return;
+    if (window.hbspt) {
+      renderHubSpotForm();
+      return;
+    }
+
+    const currentScript = document.getElementById(
+      HUBSPOT_SCRIPT_ID,
+    ) as HTMLScriptElement | null;
+    const script = currentScript ?? document.createElement("script");
+
+    script.addEventListener("load", renderHubSpotForm, { once: true });
+
+    if (!currentScript) {
+      script.id = HUBSPOT_SCRIPT_ID;
+      script.src = HUBSPOT_SCRIPT_URL;
+      script.async = true;
+      script.addEventListener(
+        "error",
+        () => {
+          const status = document.querySelector<HTMLElement>(
+            "[data-hubspot-status]",
+          );
+          if (status) {
+            status.textContent =
+              "Não foi possível carregar o formulário. Atualize a página e tente novamente.";
+          }
+        },
+        { once: true },
+      );
+      document.body.appendChild(script);
+    }
+  };
+
   const openRsvp = () => {
     setMenuOpen(false);
-    setConfirmed(false);
     dialogRef.current?.showModal();
+    window.dataLayer = window.dataLayer ?? [];
+    window.dataLayer.push({ event: "form_open", form_id: HUBSPOT_FORM_ID });
+    window.requestAnimationFrame(loadHubSpotForm);
   };
 
   const closeRsvp = () => dialogRef.current?.close();
-
-  const confirmRsvp = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setConfirmed(true);
-  };
 
   const closeMenu = () => setMenuOpen(false);
 
@@ -526,65 +610,21 @@ export default function Home() {
           ×
         </button>
 
-        {confirmed ? (
-          <div className="success-state" aria-live="polite">
-            <span>27.08</span>
-            <h2>Presença confirmada.</h2>
-            <p>
-              Os detalhes da noite e o convite de agenda serão enviados por
-              e-mail.
-            </p>
-            <button className="button button--blue" onClick={closeRsvp}>
-              Voltar à página
-            </button>
-          </div>
-        ) : (
-          <>
-            <div className="rsvp-dialog__intro">
-              <p className="eyebrow eyebrow--dark">RSVP · 27.08</p>
-              <h2>Confirme sua presença.</h2>
-              <p>
-                Informe seus dados para confirmar sua presença e, se desejar, o
-                nome de quem estará com você.
-              </p>
-              <small>Prévia: o formulário ainda não envia dados ao HubSpot.</small>
-            </div>
+        <div className="rsvp-dialog__intro">
+          <p className="eyebrow eyebrow--dark">RSVP · 27.08</p>
+          <h2>Confirme sua presença.</h2>
+          <p>
+            Informe seus dados para confirmar sua presença e, se desejar, o
+            nome de quem estará com você.
+          </p>
+        </div>
 
-            <form onSubmit={confirmRsvp}>
-              <label>
-                Nome completo
-                <input name="name" autoComplete="name" required />
-              </label>
-              <label>
-                E-mail corporativo
-                <input name="email" type="email" autoComplete="email" required />
-              </label>
-              <div className="form-row">
-                <label>
-                  Empresa
-                  <input name="company" autoComplete="organization" required />
-                </label>
-                <label>
-                  Cargo
-                  <input name="role" autoComplete="organization-title" required />
-                </label>
-              </div>
-              <label>
-                Nome do segundo representante
-                <input name="guest" />
-                <small>Opcional</small>
-              </label>
-              <button className="button button--blue" type="submit">
-                Confirmar presença
-                <span aria-hidden="true">↗</span>
-              </button>
-              <p className="form-legal">
-                Ao confirmar, você concorda em receber comunicações relacionadas
-                a este encontro.
-              </p>
-            </form>
-          </>
-        )}
+        <div className="hubspot-form-shell">
+          <p className="hubspot-form__status" data-hubspot-status aria-live="polite">
+            Carregando formulário…
+          </p>
+          <div id="hubspotForm" />
+        </div>
       </dialog>
     </main>
   );

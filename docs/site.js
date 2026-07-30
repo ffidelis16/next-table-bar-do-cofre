@@ -10,6 +10,11 @@
   const dialog = document.querySelector(".rsvp-dialog");
   const menuToggle = document.querySelector(".menu-toggle");
   const menu = document.querySelector(".site-nav");
+  const hubSpotScriptId = "hubspot-forms-v2";
+  const hubSpotScriptUrl = "https://js.hsforms.net/forms/embed/v2.js";
+  const hubSpotPortalId = "8180620";
+  const hubSpotFormId = "bdb0ccad-d2b3-471a-adf1-9187057e1ab3";
+  let hubSpotRendered = false;
 
   if (!reducedMotion) {
     root.dataset.motion = "on";
@@ -45,9 +50,64 @@
     link.addEventListener("click", closeMenu);
   });
 
+  const renderHubSpotForm = () => {
+    if (hubSpotRendered || !window.hbspt) return;
+    window.hbspt.forms.create({
+      portalId: hubSpotPortalId,
+      formId: hubSpotFormId,
+      target: "#hubspotForm",
+      onFormReady: () => {
+        document.querySelector(".hubspot-form-shell")?.classList.add("is-ready");
+      },
+      onFormSubmitted: () => {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({ event: "form_submit", form_id: hubSpotFormId });
+        window.dataLayer.push({
+          event: "generate_lead",
+          form_id: hubSpotFormId,
+          value: 1,
+        });
+      },
+    });
+    hubSpotRendered = true;
+  };
+
+  const loadHubSpotForm = () => {
+    if (hubSpotRendered) return;
+    if (window.hbspt) {
+      renderHubSpotForm();
+      return;
+    }
+
+    const currentScript = document.getElementById(hubSpotScriptId);
+    const script = currentScript || document.createElement("script");
+    script.addEventListener("load", renderHubSpotForm, { once: true });
+
+    if (!currentScript) {
+      script.id = hubSpotScriptId;
+      script.src = hubSpotScriptUrl;
+      script.async = true;
+      script.addEventListener(
+        "error",
+        () => {
+          const status = document.querySelector("[data-hubspot-status]");
+          if (status) {
+            status.textContent =
+              "Não foi possível carregar o formulário. Atualize a página e tente novamente.";
+          }
+        },
+        { once: true },
+      );
+      document.body.appendChild(script);
+    }
+  };
+
   const openDialog = () => {
     closeMenu();
     dialog?.showModal();
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event: "form_open", form_id: hubSpotFormId });
+    window.requestAnimationFrame(loadHubSpotForm);
   };
 
   document.querySelectorAll("button").forEach((button) => {
@@ -65,21 +125,6 @@
 
   dialog?.addEventListener("click", (event) => {
     if (event.target === dialog) dialog.close();
-  });
-
-  dialog?.querySelector("form")?.addEventListener("submit", (event) => {
-    event.preventDefault();
-    dialog.querySelector(".rsvp-dialog__intro")?.remove();
-    event.currentTarget.replaceWith(
-      Object.assign(document.createElement("div"), {
-        className: "success-state",
-        innerHTML:
-          '<span>27.08</span><h2>Presença confirmada.</h2><p>Os detalhes da noite e o convite de agenda serão enviados por e-mail.</p><button class="button button--blue" type="button">Voltar à página</button>',
-      }),
-    );
-    dialog
-      .querySelector(".success-state .button")
-      ?.addEventListener("click", () => dialog.close());
   });
 
   let frame = 0;

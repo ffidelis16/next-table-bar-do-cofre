@@ -58,7 +58,8 @@ npm run export:pages
 
 O GitHub Pages publica a pasta `docs/` da branch `main`.
 
-## Observação sobre o formulário
+## Formulário
 
-O formulário presente nesta versão é uma prévia de interface e ainda não envia
-dados ao HubSpot.
+O RSVP usa o mesmo formulário oficial da LP Next Sessions. O script do HubSpot
+é carregado somente quando o modal é aberto, preservando o desempenho inicial
+da página.
